@@ -1,0 +1,74 @@
+Pino
+
+Python template preprocessor
+
+Pino is a template preprocessor that is designed to integrate easily with C-like
+languages(such as C, C++, C#, and Java)
+
+Getting Started
+
+The dollar sign($) is used to signal the preprocessor. There are two types of 
+syntaxes, expressiones and blocks. A python expression is evaluated by calling:
+
+    $("hello")
+
+Blocks allow flow control, such as:
+
+    $if i is 5
+    {
+        hello
+    }
+
+Here is an example that creates a class that has a 5 variables:
+
+    class foo
+    {
+        $for i in range(5)
+        {
+            int x$(i);
+        }
+    };
+
+This will output:
+
+    class foo
+    {
+            int x0;
+            int x1;
+            int x2;
+            int x3;
+            int x4;
+    };
+
+
+How it works
+
+Overview
+
+Pino evaluates python expressions in your source code. Thus, when it finds /$()/, 
+it will evaluate whats inside of the parenthesis, and output that to the file. 
+For example, if you type /$("hello")/ it will output /hello/ without the quotes to
+the file. If you would to output /"hello"/ with quotes you can type 
+/$(quote("hello"))/.
+Now to process the file just add ".pino" extension to your file. Pino will 
+process the file, and output to the same file name with the extension removed.
+So a file named "foo.cpp.pino" will be processed and outputted to "foo.cpp".
+
+Flow control
+
+Flow control can be done using "if" and "for" statements". Here is the syntax 
+for and if statement:
+
+    $if conditional { output }
+
+If the conditional is true then whatever is in the curly braces will be 
+outputted. If it is not true, then nothing will be outputted. The conditional is
+a python expresssion. Right now, else clauses are not supported. 
+Here is the syntax for the for statement:
+
+    $for python-for { output }
+
+Everytime the for loop is run, it will output whats in the curly braces. The for
+loop is evaluated from a python for loop.
+
+
