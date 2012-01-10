@@ -48,7 +48,7 @@ Overview
 Pino evaluates python expressions in your source code. Thus, when it finds /$()/, 
 it will evaluate whats inside of the parenthesis, and output that to the file. 
 For example, if you type /$("hello")/ it will output /hello/ without the quotes to
-the file. If you would to output /"hello"/ with quotes you can type 
+the file. If you want to output /"hello"/ with quotes you can type 
 /$(quote("hello"))/.
 Now to process the file just add ".pino" extension to your file. Pino will 
 process the file, and output to the same file name with the extension removed.
