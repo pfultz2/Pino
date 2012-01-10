@@ -57,7 +57,7 @@ So a file named "foo.cpp.pino" will be processed and outputted to "foo.cpp".
 Flow control
 
 Flow control can be done using "if" and "for" statements". Here is the syntax 
-for and if statement:
+for an if statement:
 
     $if conditional { output }
 
