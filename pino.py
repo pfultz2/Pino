@@ -169,7 +169,7 @@ class TemplateEngine:
             statement = ''
             while(lexer.HasNext()):
                 token = lexer.Next()
-                if (token =='('): stack.push(')')
+                if (token =='('): stack.push({'(': ')'})
                 if (token == '{'): break
                 if (token == ')'):
                     if (len(stack) == 0): return (lexer, statement)
