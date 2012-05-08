@@ -20,6 +20,7 @@
 import re
 import string
 import sys, os
+import getopt
 
 # content => (block | statement | .)*
 # statement => $func;
@@ -226,32 +227,49 @@ class TemplateEngine:
 def quote(s):
     return '"' + s + '"'
                 
-
+def usage():
+        print "Usage: pino.py [OPTIONS] [input-file] [output-file]"
+        print ""
+        print " -c, --config    a python file(rather than a \".pino\" file) where you can define variables"
+        print "                 and functions that are available in the template file"
+        print "                 Then in the python file, just define an list called templates that contains"
+        print "                 a tuple with the template file to be processed and"
+        print "                 the name of the output file"
+        print "                 (eg. templates = [(\"MyTemplateHeader.h\", \"MyHeader.h\"), (\"MyTemplateSrc.cpp\", \"MySrc.cpp\")])"
+        print " -h, --help      display this help and exit"
+        exit()
 
 if len(sys.argv) < 2:
-        print "Error wrong arguments, It must be called like this: "
-        print "pino.py <config.py>"
-        print "or like this: "
-        print "pino.py <file.pino>"
-        exit()
+        usage()
+        sys.exit(2)
 
 templates = []
 __engine__ = TemplateEngine()
-__config_file__ = sys.argv[1]
-__config_base_file__ = os.path.basename(__config_file__)
-__config_dir__ = os.path.dirname(__config_file__)
-#change current working directory
+__config_dir__ = __config_base_file__ = __config_file__ = ""
+
+try:
+        opts, args = getopt.getopt(sys.argv[1:], "hc:", ["help", "config="])
+except getopt.GetoptError:
+        usage()
+        sys.exit(2) 
+  
+for opt, arg in opts:
+        if opt in ("-h", "--help"):
+          usage()
+          sys.exit(0)
+        elif opt in ("-c", "--config"):
+          __config_file__ = arg
+          __config_base_file__ = os.path.basename(__config_file__)
+          __config_dir__ = os.path.dirname(__config_file__)
+
+# change current working directory
 if len(__config_dir__) > 0: os.chdir(__config_dir__)
-#dont run as python file if it has .pino
-if ".pino" in __config_base_file__:
-    templates = [(__config_base_file__, __config_base_file__.replace(".pino", ""))]    
-else:
-    execfile(__config_base_file__)
+# execute config file if defined
+if len(__config_base_file__) > 0: 
+  execfile(__config_base_file__)
+else: # otherwise use the input parameters by order, first input then output
+  templates = [(args[0], args[1])]    
 
 for (template, output_file) in templates:
     output = __engine__.Process(open(template).read())
     open(output_file, "w+").write(output)
-
-
-
-
