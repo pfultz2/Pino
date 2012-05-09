@@ -37,6 +37,8 @@ import getopt
 # expression => $(func)
 # block => $func { content }
 
+__ptoken__ = '$'
+
 class Lexer:
     lexer_regex = "\\w+|\\s+|\\W"
     def __init__(self, s, index=-1, tokens=""):
@@ -152,7 +154,7 @@ class TemplateEngine:
 
     #deprecated
     def parse_statement(self, lexer):
-        if (lexer.HasNext() and lexer.Next() == '$'):
+        if (lexer.HasNext() and lexer.Next() == __ptoken__):
             #print "parse statement"
             statement = ''
             while(lexer.HasNext()):
@@ -165,7 +167,7 @@ class TemplateEngine:
         return (None, '')
                 
     def parse_block(self, lexer):
-        if (lexer.HasNext() and lexer.Next() == '$'):
+        if (lexer.HasNext() and lexer.Next() == __ptoken__):
             statement = ''
             while(lexer.HasNext()):
                 token = lexer.Next()
@@ -178,7 +180,7 @@ class TemplateEngine:
         
         
     def parse_expr(self, lexer):
-        if (lexer.HasNext() and lexer.Next() == '$' and lexer.HasNext() and lexer.Next() == '('):
+        if (lexer.HasNext() and lexer.Next() == __ptoken__ and lexer.HasNext() and lexer.Next() == '('):
             stack = VariableStack()
             statement = ''
             while(lexer.HasNext()):
