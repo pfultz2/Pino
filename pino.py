@@ -264,12 +264,12 @@ __engine__ = TemplateEngine()
 __config_dir__ = __config_base_file__ = __config_file__ = ""
 
 try:
-        opts, args = getopt.getopt(sys.argv[1:], "hc:", ["help", "config="])
+        __opts__, __args__ = getopt.getopt(sys.argv[1:], "hc:", ["help", "config="])
 except getopt.GetoptError:
         usage()
         sys.exit(2) 
   
-for opt, arg in opts:
+for opt, arg in __opts__:
         if opt in ("-h", "--help"):
           usage()
           sys.exit(0)
@@ -284,11 +284,11 @@ if len(__config_dir__) > 0: os.chdir(__config_dir__)
 if len(__config_base_file__) > 0: 
     execfile(__config_base_file__)
 #use input parameters for the input and output file
-if len(args) > 1:
-    templates = [(args[0], args[1])]
+if len(__args__) > 1:
+    templates = [(__args__[0], __args__[1])]
 #use the input parameter for the input file, and remove .pino for the output file
-if len(args) == 1:
-    templates = [(args[0], args[0].replace(".pino", ""))]
+if len(__args__) == 1:
+    templates = [(__args__[0], __args__[0].replace(".pino", ""))]
        
 
 for (template, output_file) in templates:
