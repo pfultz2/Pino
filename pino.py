@@ -107,6 +107,9 @@ class TemplateEngine:
     def AddCommand(self, token, command):
         self.commands[token] = command
         
+    def AddMacro(self, func):
+        self.commands[func.__name__] = lambda statement, content: func(self.token_tail(statement).strip(), self.process_template(content))
+        
     def if_(self, statement, content):
         tail = self.token_tail(statement).strip()
         try:
