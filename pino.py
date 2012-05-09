@@ -266,9 +266,14 @@ for opt, arg in opts:
 if len(__config_dir__) > 0: os.chdir(__config_dir__)
 # execute config file if defined
 if len(__config_base_file__) > 0: 
-  execfile(__config_base_file__)
-else: # otherwise use the input parameters by order, first input then output
-  templates = [(args[0], args[1])]    
+    execfile(__config_base_file__)
+#use input parameters for the input and output file
+if len(args) > 1:
+    templates = [(args[0], args[1])]
+#use the input parameter for the input file, and remove .pino for the output file
+if len(args) == 1:
+    templates = [(args[0], args[0].replace(".pino", ""))]
+       
 
 for (template, output_file) in templates:
     output = __engine__.Process(open(template).read())
