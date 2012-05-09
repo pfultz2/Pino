@@ -1,0 +1,246 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Pino by pfultz2</title>
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script src="javascripts/main.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+  </head>
+  <body>
+
+      <header>
+        <h1>Pino</h1>
+        <p>Python template preprocessor</p>
+      </header>
+
+      <div id="banner">
+        <span id="logo"></span>
+
+        <a href="https://github.com/pfultz2/Pino" class="button fork"><strong>View On GitHub</strong></a>
+        <div class="downloads">
+          <span>Downloads:</span>
+          <ul>
+            <li><a href="https://github.com/pfultz2/Pino/zipball/master" class="button">ZIP</a></li>
+            <li><a href="https://github.com/pfultz2/Pino/tarball/master" class="button">TAR</a></li>
+          </ul>
+        </div>
+      </div><!-- end banner -->
+
+    <div class="wrapper">
+      <nav>
+        <ul></ul>
+      </nav>
+      <section>
+        <h1>Pino</h1>
+
+<h2>Python template preprocessor</h2>
+
+<p>Pino is a template preprocessor that is designed to integrate easily with C-like languages(such as C, C++, C#, and Java). To process a file called "myfile.template.c" and output it to "myfile.c" just call:</p>
+
+<pre><code>pino.py myfile.template.c myfile.c
+</code></pre>
+
+<p>If you file is called "myfile.pino.c" then you can just call it like this:</p>
+
+<pre><code>pino.py myfile.pino.c
+</code></pre>
+
+<p>And pino will remove the ".pino" extension, and output a to a file called "myfile.c".</p>
+
+<h2>Getting Started</h2>
+
+<p>The dollar sign($) is used to signal the preprocessor. There are two types of syntaxes, expressions and blocks. A python expression is evaluated by calling:</p>
+
+<div class="highlight">
+<pre><span class="nx">$</span><span class="p">(</span><span class="s2">"hello"</span><span class="p">)</span>
+</pre>
+</div>
+
+
+<p>Blocks allow flow control, such as:</p>
+
+<div class="highlight">
+<pre><span class="nx">$if</span> <span class="nx">i</span> <span class="nx">is</span> <span class="mi">5</span>
+<span class="p">{</span>
+    <span class="nx">hello</span>
+<span class="p">}</span>
+</pre>
+</div>
+
+
+<p>Here is an example that creates a class that has 5 variables:</p>
+
+<div class="highlight">
+<pre><span class="kr">class</span> <span class="nx">foo</span>
+<span class="p">{</span>
+    <span class="nx">$for</span> <span class="nx">i</span> <span class="k">in</span> <span class="nx">range</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="kr">int</span> <span class="nx">x$</span><span class="p">(</span><span class="nx">i</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+</pre>
+</div>
+
+
+<p>This will output:</p>
+
+<div class="highlight">
+<pre><span class="kr">class</span> <span class="nx">foo</span>
+<span class="p">{</span>
+        <span class="kr">int</span> <span class="nx">x0</span><span class="p">;</span>
+        <span class="kr">int</span> <span class="nx">x1</span><span class="p">;</span>
+        <span class="kr">int</span> <span class="nx">x2</span><span class="p">;</span>
+        <span class="kr">int</span> <span class="nx">x3</span><span class="p">;</span>
+        <span class="kr">int</span> <span class="nx">x4</span><span class="p">;</span>
+<span class="p">};</span>
+</pre>
+</div>
+
+
+<h1>How it works</h1>
+
+<h2>Overview</h2>
+
+<p>Pino evaluates python expressions in your source code. Thus, when it finds <code>$()</code>, it will evaluate whats inside of the parenthesis, and output that to the file. For example, if you type <code>$("hello")</code> it will output <code>hello</code> without the quotes to the file. If you want to output <code>"hello"</code> with quotes you can type <code>$(quote("hello"))</code>. Now to process the file just add ".pino" extension to your file. Pino will process the file, and output to the same file name with the extension removed. So a file named "foo.cpp.pino" will be processed and outputted to "foo.cpp".</p>
+
+<h2>Flow control</h2>
+
+<p>Flow control can be done using "if" and "for" statements". Here is the syntax for an if statement:</p>
+
+<div class="highlight">
+<pre><span class="nx">$if</span> <span class="nx">conditional</span> <span class="p">{</span> <span class="nx">output</span> <span class="p">}</span>
+</pre>
+</div>
+
+
+<p>If the conditional is true then whatever is in the curly braces will be outputted. If it is not true, then nothing will be outputted. The conditional is a python expression. Right now, else clauses are not supported. Here is the syntax for the for statement:</p>
+
+<div class="highlight">
+<pre><span class="nx">$for</span> <span class="kd">var</span> <span class="k">in</span> <span class="nx">sequence</span> <span class="p">{</span> <span class="nx">output</span> <span class="p">}</span>
+</pre>
+</div>
+
+
+<p>Every time the for loop is run, it will output what's in the curly braces. The for loop is evaluated from a python for loop.</p>
+
+<h2>Python config file</h2>
+
+<p>If you want to define python variables and functions to be used in the python file, you can create a python file and pass it into pino like this:</p>
+
+<pre><code>pino.py --config=myconfig.py myfile.template.c myfile.c
+</code></pre>
+
+<p>Any variables or functions define in "myconfig.py" will be accessible during processing of the "myfile.template.c" file. For example, if we defined a "template.py" file like this:</p>
+
+<div class="highlight">
+<pre><span class="n">class_name</span> <span class="o">=</span> <span class="s">"foo"</span>
+<span class="n">number_of_vars</span> <span class="o">=</span> <span class="mi">5</span>
+</pre>
+</div>
+
+
+<p>Then if the "MyTemplate.pino.h" file was defined like this:</p>
+
+<div class="highlight">
+<pre><span class="kr">class</span> <span class="nx">$</span><span class="p">(</span><span class="nx">class_name</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="nx">$for</span> <span class="nx">i</span> <span class="k">in</span> <span class="nx">range</span><span class="p">(</span><span class="nx">number_of_vars</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="kr">int</span> <span class="nx">x$</span><span class="p">(</span><span class="nx">i</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+</pre>
+</div>
+
+
+<p>You can process the template using pino by calling this:</p>
+
+<pre><code>pino.py --config=template.py MyTemplate.pino.h
+</code></pre>
+
+<p>Then pino will generate a file called "MyTemplate.h" with this output:</p>
+
+<div class="highlight">
+<pre><span class="kr">class</span> <span class="nx">foo</span>
+<span class="p">{</span>
+        <span class="kr">int</span> <span class="nx">x0</span><span class="p">;</span>
+        <span class="kr">int</span> <span class="nx">x1</span><span class="p">;</span>
+        <span class="kr">int</span> <span class="nx">x2</span><span class="p">;</span>
+        <span class="kr">int</span> <span class="nx">x3</span><span class="p">;</span>
+        <span class="kr">int</span> <span class="nx">x4</span><span class="p">;</span>
+<span class="p">};</span>
+</pre>
+</div>
+
+
+<h2>Multiple Files</h2>
+
+<p>Instead of specifying input and output files on the command line, the files to be processed can be specified in the python config file instead. This lets you specify multiple files at once. To sepcify multiple files, just define an list called <code>templates</code> that contains a tuple with the template file to be processed and the name of the output file, like this:</p>
+
+<div class="highlight">
+<pre><span class="n">templates</span> <span class="o">=</span> <span class="p">[(</span><span class="s">"MyTemplateHeader.h"</span><span class="p">,</span> <span class="s">"MyHeader.h"</span><span class="p">),</span> <span class="p">(</span><span class="s">"MyTemplateSrc.cpp"</span><span class="p">,</span> <span class="s">"MySrc.cpp"</span><span class="p">)]</span>
+</pre>
+</div>
+
+
+<p>This will process each file in the templates list, and any variables defined in this file will be accessible during processing.  So, for example, if you wrote a "template.py" file define like this:</p>
+
+<div class="highlight">
+<pre><span class="n">templates</span> <span class="o">=</span> <span class="p">[(</span><span class="s">"MyTemplate.h"</span><span class="p">,</span> <span class="s">"MyHeader.h"</span><span class="p">)]</span>
+<span class="n">class_name</span> <span class="o">=</span> <span class="s">"foo"</span>
+<span class="n">number_of_vars</span> <span class="o">=</span> <span class="mi">5</span>
+</pre>
+</div>
+
+
+<p>Then if the "MyTemplate.h" file was defined like this:</p>
+
+<div class="highlight">
+<pre><span class="kr">class</span> <span class="nx">$</span><span class="p">(</span><span class="nx">class_name</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="nx">$for</span> <span class="nx">i</span> <span class="k">in</span> <span class="nx">range</span><span class="p">(</span><span class="nx">number_of_vars</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="kr">int</span> <span class="nx">x$</span><span class="p">(</span><span class="nx">i</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+</pre>
+</div>
+
+
+<p>To process the files specified by the <code>templates</code> list, you must pass in the just config file without any input or output files, like this:</p>
+
+<pre><code>pino.py --config=template.py
+</code></pre>
+
+<p>Then pino will generate a file called "MyHeader.h" with this output:</p>
+
+<div class="highlight">
+<pre><span class="kr">class</span> <span class="nx">foo</span>
+<span class="p">{</span>
+        <span class="kr">int</span> <span class="nx">x0</span><span class="p">;</span>
+        <span class="kr">int</span> <span class="nx">x1</span><span class="p">;</span>
+        <span class="kr">int</span> <span class="nx">x2</span><span class="p">;</span>
+        <span class="kr">int</span> <span class="nx">x3</span><span class="p">;</span>
+        <span class="kr">int</span> <span class="nx">x4</span><span class="p">;</span>
+<span class="p">};</span>
+</pre>
+</div>
+
+      </section>
+      <footer>
+        <p>Project maintained by <a href="https://github.com/pfultz2">pfultz2</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="http://twitter.com/#!/michigangraham">mattgraham</a></small></p>
+      </footer>
+    </div>
+    <!--[if !IE]><script>fixScale(document);</script><!--<![endif]-->
+    
+  </body>
+</html>
