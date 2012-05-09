@@ -6,11 +6,15 @@ Pino is a template preprocessor that is designed to integrate easily with C-like
 ```
 pino.py myfile.template.c myfile.c
 ```
+If you file is called "myfile.pino.c" then you can just call it like this:
+```
+pino.py myfile.pino.c
+```
+And pino will remove the ".pino" extension, and output a to a file called "myfile.c".
 
 ## Getting Started
 
-The dollar sign($) is used to signal the preprocessor. There are two types of 
-syntaxes, expressions and blocks. A python expression is evaluated by calling:
+The dollar sign($) is used to signal the preprocessor. There are two types of syntaxes, expressions and blocks. A python expression is evaluated by calling:
 ```Javascript
 $("hello")
 ```
@@ -47,35 +51,60 @@ class foo
 
 ## Overview
 
-Pino evaluates python expressions in your source code. Thus, when it finds `$()`, 
-it will evaluate whats inside of the parenthesis, and output that to the file. 
-For example, if you type `$("hello")` it will output `hello` without the quotes to
-the file. If you want to output `"hello"` with quotes you can type 
-`$(quote("hello"))`.
-Now to process the file just add ".pino" extension to your file. Pino will 
-process the file, and output to the same file name with the extension removed.
-So a file named "foo.cpp.pino" will be processed and outputted to "foo.cpp".
+Pino evaluates python expressions in your source code. Thus, when it finds `$()`, it will evaluate whats inside of the parenthesis, and output that to the file. For example, if you type `$("hello")` it will output `hello` without the quotes to the file. If you want to output `"hello"` with quotes you can type `$(quote("hello"))`. Now to process the file just add ".pino" extension to your file. Pino will process the file, and output to the same file name with the extension removed. So a file named "foo.cpp.pino" will be processed and outputted to "foo.cpp".
 
 ## Flow control
 
-Flow control can be done using "if" and "for" statements". Here is the syntax 
-for an if statement:
+Flow control can be done using "if" and "for" statements". Here is the syntax for an if statement:
 ```Javascript
 $if conditional { output }
 ```
-If the conditional is true then whatever is in the curly braces will be 
-outputted. If it is not true, then nothing will be outputted. The conditional is
-a python expression. Right now, else clauses are not supported. 
-Here is the syntax for the for statement:
+If the conditional is true then whatever is in the curly braces will be outputted. If it is not true, then nothing will be outputted. The conditional is a python expression. Right now, else clauses are not supported. Here is the syntax for the for statement:
 ```Javascript
 $for python-for { output }
 ```
-Every time the for loop is run, it will output what's in the curly braces. The for
-loop is evaluated from a python for loop.
+Every time the for loop is run, it will output what's in the curly braces. The for loop is evaluated from a python for loop.
+
+## Python config file
+
+If you want to define python variables and functions to be used in the python file, you can create a python file and pass it into pino like this:
+```
+pino.py --config=myconfig.py myfile.template.c myfile.c
+```
+Any variables or functions define in "myconfig.py" will be accessible during processing of the "myfile.template.c" file. For example, if we defined a "template.py" file like this:
+```Python
+class_name = "foo"
+number_of_vars = 5
+```
+Then if the "MyTemplate.pino.h" file was defined like this:
+```Javascript
+class $(class_name)
+{
+    $for i in range(number_of_vars)
+    {
+        int x$(i);
+    }
+};
+```
+You can process the template using pino by calling this:
+```
+pino.py --config=template.py MyTemplate.pino.h
+```
+Then pino will generate a file called "MyTemplate.h" with this output:
+```Javascript
+class foo
+{
+        int x0;
+        int x1;
+        int x2;
+        int x3;
+        int x4;
+};
+```
 
 ## Multiple Files
 
-If you are wanting to process several files in a data driven way, then you can pass a python file(rather than a ".pino" file) where you can define variables and functions that are available in the template file. Then in the python file, just define an list called templates that contains a tuple with the template file to be processed and the name of the output file:
+Instead of specifying input and output files on the command line, the files to be processed can be specified in the python config file instead. This lets you specify multiple files at once. To sepcify multiple files, just define an list called `templates` that contains a tuple with the template file to be processed and the name of the output file, like this:
 ```Python
 templates = [("MyTemplateHeader.h", "MyHeader.h"), ("MyTemplateSrc.cpp", "MySrc.cpp")]
 ```
@@ -95,7 +124,7 @@ class $(class_name)
     }
 };
 ```
-Call pino on the file like this:
+To process the files specified by the `templates` list, you must pass in the just config file without any input or output files, like this:
 ```
 pino.py --config=template.py
 ```
