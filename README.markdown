@@ -2,9 +2,9 @@
 
 ## Python template preprocessor
 
-Pino is a template preprocessor that is designed to integrate easily with C-like languages(such as C, C++, C#, and Java). To process a file called "myfile.pino" just call:
+Pino is a template preprocessor that is designed to integrate easily with C-like languages(such as C, C++, C#, and Java). To process a file called "myfile.template.c" and output it to "myfile.c" just call:
 ```
-pino.py myfile.pino
+pino.py myfile.template.c myfile.c
 ```
 
 ## Getting Started
@@ -97,7 +97,7 @@ class $(class_name)
 ```
 Call pino on the file like this:
 ```
-pino.py template.py
+pino.py --config=template.py
 ```
 Then pino will generate a file called "MyHeader.h" with this output:
 ```Javascript
