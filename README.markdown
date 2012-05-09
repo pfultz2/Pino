@@ -61,7 +61,7 @@ $if conditional { output }
 ```
 If the conditional is true then whatever is in the curly braces will be outputted. If it is not true, then nothing will be outputted. The conditional is a python expression. Right now, else clauses are not supported. Here is the syntax for the for statement:
 ```Javascript
-$for python-for { output }
+$for var in sequence { output }
 ```
 Every time the for loop is run, it will output what's in the curly braces. The for loop is evaluated from a python for loop.
 
