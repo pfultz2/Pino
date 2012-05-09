@@ -232,9 +232,10 @@ def usage():
         print ""
         print " -c, --config    a python file(rather than a \".pino\" file) where you can define variables"
         print "                 and functions that are available in the template file"
-        print "                 Then in the python file, just define an list called templates that contains"
-        print "                 a tuple with the template file to be processed and"
-        print "                 the name of the output file"
+        print "                 If an input file and output file is not specified then the files to be"
+        print "                 processed must be specified in the python file. This can be done by defining "
+        print "                 a list called templates that contain a tuple with the template file to be "
+        print "                 processed and the name of the output file"
         print "                 (eg. templates = [(\"MyTemplateHeader.h\", \"MyHeader.h\"), (\"MyTemplateSrc.cpp\", \"MySrc.cpp\")])"
         print " -h, --help      display this help and exit"
         exit()
