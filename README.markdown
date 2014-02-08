@@ -6,7 +6,7 @@ Pino is a template preprocessor that is designed to integrate easily with C-like
 ```
 pino.py myfile.template.c myfile.c
 ```
-If you file is called "myfile.pino.c" then you can just call it like this:
+If your file is called "myfile.pino.c" then you can just call it like this:
 ```
 pino.py myfile.pino.c
 ```
@@ -55,15 +55,15 @@ Pino evaluates python expressions in your source code. Thus, when it finds `$()`
 
 ## Flow control
 
-Flow control can be done using "if" and "for" statements". Here is the syntax for an if statement:
+Flow control can be done using `if` and `for` statements". Here is the syntax for an `if` statement:
 ```Javascript
 $if conditional { output }
 ```
-If the conditional is true then whatever is in the curly braces will be outputted. If it is not true, then nothing will be outputted. The conditional is a python expression. Right now, else clauses are not supported. Here is the syntax for the for statement:
+If the conditional is true then whatever is in the curly braces will be outputted. If it is not true, then nothing will be outputted. The conditional is a python expression. Right now, `else` clauses are not supported. Here is the syntax for the `for` statement:
 ```Javascript
 $for var in sequence { output }
 ```
-Every time the for loop is run, it will output what's in the curly braces. The for loop is evaluated from a python for loop.
+Every time the `for` loop is run, it will output what's in the curly braces. The `for` loop is evaluated from a python `for` loop.
 
 ## Python config file
 
@@ -104,11 +104,11 @@ class foo
 
 ## Multiple Files
 
-Instead of specifying input and output files on the command line, the files to be processed can be specified in the python config file instead. This lets you specify multiple files at once. To sepcify multiple files, just define an list called `templates` that contains a tuple with the template file to be processed and the name of the output file, like this:
+Instead of specifying input and output files on the command line, the files to be processed can be specified in the python config file instead. This lets you specify multiple files at once. To specify multiple files, just define an list called `templates` that contains a tuple with the template file to be processed and the name of the output file, like this:
 ```Python
 templates = [("MyTemplateHeader.h", "MyHeader.h"), ("MyTemplateSrc.cpp", "MySrc.cpp")]
 ```
-This will process each file in the templates list, and any variables defined in this file will be accessible during processing.  So, for example, if you wrote a "template.py" file define like this:
+This will process each file in the `templates` list, and any variables defined in this file will be accessible during processing.  So, for example, if you wrote a "template.py" file define like this:
 ```Python
 templates = [("MyTemplate.h", "MyHeader.h")]
 class_name = "foo"
@@ -124,7 +124,7 @@ class $(class_name)
     }
 };
 ```
-To process the files specified by the `templates` list, you must pass in the just config file without any input or output files, like this:
+To process the files specified by the `templates` list, you must pass in just the config file without any input or output files, like this:
 ```
 pino.py --config=template.py
 ```
